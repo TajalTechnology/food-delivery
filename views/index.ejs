@@ -11,10 +11,187 @@
     <h1 style="background-color: blue; text-align: center;">Backend API list || Developed by Md.Tajal Islam</h1>
     <h3 style="text-align: center;">Company Name: Manush AI Technology</h3>
     <hr>
-    <p style="text-align: center;"><i>Module Name:</i><b>Users</b></p>
+    <p style="text-align: center;"><i>Module Name:</i><b>Users {Task No-1 & 2}</b></p>
     <hr style="height: 6px; background-color: aqua;">
+    <p style="background-color:rgb(235, 224, 224);">
+        1.Registration/User create:=> http://localhost:6002/api/user <span style="background-color:rgb(196, 43, 43);">POST</span>
 
+        <pre>
+            Payload:
+        {
+            "name":"MyName", 
+            "email":"mdtajal@gmail.com", 
+            "password":"sopnilislam", 
+            "phone":12673375, 
+            "address":"Kazla"
+        }
+        </pre>
+    </p>
+    <p style="background-color:rgb(235, 224, 224);">
+        2.log-in:=> http://localhost:6002/api/log-in <span style="background-color:rgb(196, 43, 43);">POST</span>
 
+        <pre>
+            Payload:
+        {
+            "email":"mdtajal@gmail.com", 
+            "password":"sopnilislam", 
+        }
+        </pre> ***When log-in then it create a jwt token. <br>
+        <p></p>
+        <pre>
+           "token": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwMTY0MWNmNmZkOTFkMjMzNzky
+            YWM4MSIsIm5hbWUiOiJNeU5hbWUiLCJlbWFpbCI6Im1kdGFqYWxAZ21haWwuY29tIiwiYWRkcmVzcyI6I
+            kthemxhIiwicGhvbmUiOiIxMjY3MzM3NSIsImlhdCI6MTYxMjA3MTQyN30.bVVxDgdOvuXNu_b1Q0Oqg7
+            kfBaN-9rraAnC1tgJ9UOs"
+        </pre>
+
+    </p>
+
+    <p style="background-color:rgb(235, 224, 224);">
+        3.User update:=> http://localhost:6002/api/user <span style="background-color:rgb(196, 43, 43);">PUT</span>
+
+        <pre>
+            
+            Payload:
+            <span style="background-color:rgb(68, 48, 48);">Send authorization token to Headers</span>
+        {
+            "name":"MyName", 
+            "phone":12673375, 
+            "address":"Kazla"
+        }
+        </pre>
+    </p>
+
+    <p style="background-color:rgb(235, 224, 224);">
+        4.User delete:=> http://localhost:6002/api/user <span style="background-color:rgb(196, 43, 43);">DELETE</span>
+
+        <pre>
+            
+            Credentials:
+            <span style="background-color:rgb(68, 48, 48);">Send authorization token to Headers</span>
+        </pre>
+    </p>
+
+    <p style="text-align: center;"><i>Module Name:</i><b>Menu's {Task No-3}</b></p>
+
+    <p style="background-color:rgb(235, 224, 224);">
+        6.All Menu's View:=> http://localhost:6002/api/menus <span style="background-color:rgb(196, 43, 43);">GET</span> <br>
+
+        <pre>
+            ***Run command: node faker.js [Create menu's using faker] 
+            Credentials:
+            <span style="background-color:rgb(68, 48, 48);">Send authorization token to Headers</span>
+        </pre>
+    </p>
+
+    <p style="text-align: center;"><i>Module Name:</i><b>Order's {Task No-4 & 5}</b></p>
+
+    <p style="background-color:rgb(235, 224, 224);">
+        7.Order create:=> http://localhost:6002/api/orders <span style="background-color:rgb(196, 43, 43);">POST</span> <br>
+
+        <pre>
+            ***Run command: node faker.js [Create menu's using faker] 
+            Credentials:
+            <span style="background-color:rgb(68, 48, 48);">Send authorization token to Headers</span>
+           
+            {
+                "order_name":"New Order", 
+                "menus":["6016337c1cc0411238b4d40e","6016435d48fef0252a0e0dc9"]
+            }
+        </pre> Output like:
+        <pre>
+            {
+                "totalCost": 178,
+                "userDetails": {
+                    "userName": "MyName",
+                    "address": "Kazla",
+                    "phone": "12673375"
+                },
+                "orderDetails": {
+                    "menus": [
+                        {
+                            "menu_status": false,
+                            "_id": "6016337c1cc0411238b4d40e",
+                            "menu_name": "tajalMenu-update",
+                            "price": 123,
+                            "description": "Hello",
+                            "createdAt": "2021-01-31T04:35:08.211Z",
+                            "updatedAt": "2021-01-31T04:43:29.714Z",
+                            "__v": 0
+                        },
+                        {
+                            "menu_status": false,
+                            "_id": "6016435d48fef0252a0e0dc9",
+                            "menu_name": "tajalMenu-update",
+                            "price": 55,
+                            "description": "Hello",
+                            "createdAt": "2021-01-31T05:42:53.268Z",
+                            "updatedAt": "2021-01-31T05:42:53.268Z",
+                            "__v": 0
+                        }
+                    ],
+                    "_id": "6016568c52694c3ccdd00524",
+                    "order_name": "New Order",
+                    "createdAt": "2021-01-31T07:04:44.551Z",
+                    "updatedAt": "2021-01-31T07:04:44.551Z",
+                    "__v": 0
+                }
+            }
+        </pre>
+    </p>
+
+    <p style="text-align: center;"><i>Module Name:</i><b>Other API</b></p>
+    Updated::: I didn't attach all API & Permission right now...i just attach what you want.
 </body>
+
+<p style="background-color:rgb(235, 224, 224);">
+    8.MENU CREATE:=> http://localhost:6002/api/menus <span style="background-color:rgb(196, 43, 43);">POST</span>
+
+    <pre>
+        
+        Payload:
+        <span style="background-color:rgb(68, 48, 48);">Send authorization token to Headers</span>
+        {
+            "menu_name":"tajalMenu-update",
+            "price":55,
+            "menu_status":false,
+            "description":"Hello"
+        }
+    </pre>
+</p>
+<p style="background-color:rgb(235, 224, 224);">
+    9.User update:=> http://localhost:6002/api/menus/:id <span style="background-color:rgb(196, 43, 43);">PATCH</span>
+
+    <pre>
+        
+        Payload:
+        <span style="background-color:rgb(68, 48, 48);">Send authorization token to Headers</span>
+        {
+            "menu_name":"tajalMenu-update",
+            "price":55,
+            "menu_status":false,
+            "description":"Hello"
+        }
+    </pre>
+</p>
+<p style="background-color:rgb(235, 224, 224);">
+    1O.User update:=> http://localhost:6002/api/menus/:id <span style="background-color:rgb(196, 43, 43);">DELETE</span>
+
+    <pre>
+        
+        Payload:
+        <span style="background-color:rgb(68, 48, 48);">Send authorization token to Headers</span>
+ 
+    </pre>
+</p>
+<p style="background-color:rgb(235, 224, 224);">
+    11.User update:=> http://localhost:6002/api/orders <span style="background-color:rgb(196, 43, 43);">GET</span>
+
+    <pre>
+        
+        Payload:
+        <span style="background-color:rgb(68, 48, 48);">Send authorization token to Headers</span>
+    </pre>
+</p>
 
 </html>

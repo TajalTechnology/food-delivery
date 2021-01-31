@@ -1,18 +1,13 @@
 const router = require('express').Router()
-    // const {authorValidator} =require('../middleware/authors')
+const { authVerify } = require('../middleware/authVerify')
+const { menusValidator } = require('../validation/orders')
 
 const {
     authorCreate,
-    // authorUpdate,
-    // authorsGet,
-    // authorDelete
+    orderGet
 } = require('../controllers/orders')
 
-
-router.post('/orders', authorCreate)
-    // router.patch('/authors/:id',authorValidator, authorUpdate)
-    // router.get('/authors', authorsGet)
-    // router.delete('/authors/:id', authorDelete)
-
+router.post('/orders', authVerify, menusValidator, authorCreate)
+router.get('/orders', orderGet)
 
 module.exports = router

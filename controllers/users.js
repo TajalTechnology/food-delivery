@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt')
 const { validationResult } = require('express-validator')
 const jwt = require('jsonwebtoken')
 
+
 module.exports = {
     createUser: (req, res) => {
 
@@ -138,6 +139,6 @@ module.exports = {
             }).catch(error => {
                 return res.status(400).json({ error })
             })
-    }
+    },
 
 }
