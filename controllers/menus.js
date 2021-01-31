@@ -5,21 +5,23 @@ module.exports = {
 
     createMenu: (req, res) => {
 
-        let { menu_name } = req.body
-        let menu = new Menu({ menu_name })
+        let { menu_name, price, menu_status, description } = req.body
+        let menu = new Menu({ menu_name, price, menu_status, description })
 
-        //error show
-        // let errors = validationResult(req)
-        // const formatter = (error) => error.msg
-        // if (!errors.isEmpty()) {
-        //     return res.status(404).send({
-        //         message: errors.formatWith(formatter).mapped(),
-        //     });
-        // }
+        // error show
+        let errors = validationResult(req)
+        const formatter = (error) => error.msg
+        if (!errors.isEmpty()) {
+            return res.status(404).send({
+                message: errors.formatWith(formatter).mapped(),
+            });
+        }
 
         menu.save()
-            .then(book => {
-                res.status(201).json({ book })
+            .then(menu => {
+                res.status(201).json({
+                    menu
+                })
             })
             .catch(err => {
                 res.status(500).json({
@@ -28,28 +30,58 @@ module.exports = {
             })
 
     },
+    getMenu: async(req, res) => {
+        let currentPage = parseInt(req.query.page) || 1
+        let itemPerPage = 2
+        let totalMenus = await Menu.countDocuments()
+        let totalPage = Math.ceil(totalMenus / itemPerPage)
 
-    updateBook: (req, res) => {
+        Menu.find()
+            .skip((itemPerPage * currentPage) - itemPerPage)
+            .limit(itemPerPage)
+            .then(menus => {
+                res.status(202).json({
+                    "pagination": {
+                        totalMenus,
+                        currentPage,
+                        totalPage
+                    },
+                    menus
+                })
+            })
+            .catch(err => {
+                res.status(500).json({
+                    message: err.message || "Some error occurred while updating books info"
+                })
+            })
+    },
 
-        let { menu_name } = req.body
-        let { id } = req.params
+    updateMenu: (req, res) => {
 
-        //error show
-        // let errors = validationResult(req)
-        // const formatter = (error) => error.msg
-        // if (!errors.isEmpty()) {
-        //     return res.status(404).send({
-        //         message: errors.formatWith(formatter).mapped(),
-        //     });
-        // }
+        let { menu_name, price, menu_status, description } = req.body
+        let id = req.params.id
+
+        // error show
+        let errors = validationResult(req)
+        const formatter = (error) => error.msg
+        if (!errors.isEmpty()) {
+            return res.status(404).send({
+                message: errors.formatWith(formatter).mapped(),
+            });
+        }
 
         Menu.findOneAndUpdate({ _id: id }, {
                 $set: {
-                    menu_name
+                    menu_name,
+                    price,
+                    menu_status,
+                    description
                 }
             }, { new: true })
-            .then(book => {
-                res.status(202).json({ book })
+            .then(menu => {
+                res.status(202).json({
+                    menu
+                })
             })
             .catch(err => {
                 res.status(500).json({
@@ -59,62 +91,26 @@ module.exports = {
 
     },
 
-    // getBook: async(req, res) => {
 
-    //     let currentPage = parseInt(req.query.page) || 1
-    //     let itemPerPage = 2
-    //     let totalBooks = await Book.countDocuments()
-    //     let totalPage = Math.ceil(totalBooks / itemPerPage)
+    deleteMenu: (req, res) => {
 
-    //     Book.find()
-    //         .populate('author')
-    //         .skip((itemPerPage * currentPage) - itemPerPage)
-    //         .limit(itemPerPage)
-    //         // .exec()
-    //         .then(books => {
-    //             if (books) {
-    //                 res.status(200).json({
-    //                     "pagination": {
-    //                         totalBooks,
-    //                         currentPage,
-    //                         totalPage
-    //                     },
-    //                     books
-    //                 })
-    //             } else {
-    //                 return res.status(404).send({
-    //                     message: "Books not found ",
-    //                 });
-    //             }
+        let id = req.params
 
-    //         })
-    //         .catch(err => {
-    //             res.status(500).json({
-    //                 message: err.message || "Some error occurred"
-    //             })
-    //         })
+        Menu.findOneAndDelete({ _id: id })
+            .then(menus => {
+                if (!menus) {
+                    return res.status(404).send({
+                        message: "Menu not found ",
+                    });
+                } else {
+                    res.status(200).json({ message: 'Menu deleted successfully' })
+                }
+            })
+            .catch(err => {
+                res.status(500).json({
+                    message: err.message || "Some error occurred"
+                })
+            })
 
-    // },
-
-    // deleteBook: (req, res) => {
-
-    //     let { id } = req.params
-
-    //     Book.findOneAndDelete({ _id: id })
-    //         .then(books => {
-    //             if (!books) {
-    //                 return res.status(404).send({
-    //                     message: "Book not found ",
-    //                 });
-    //             } else {
-    //                 res.status(200).json({ message: 'Book deleted successfully' })
-    //             }
-    //         })
-    //         .catch(err => {
-    //             res.status(500).json({
-    //                 message: err.message || "Some error occurred"
-    //             })
-    //         })
-
-    // },
+    },
 }

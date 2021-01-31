@@ -1,26 +1,44 @@
 const Order = require('../models/orders')
-    // const { validationResult } = require('express-validator')
+const Menu = require('../models/menus')
+const { models } = require('mongoose')
+const { validationResult } = require('express-validator')
 
 module.exports = {
 
     authorCreate: (req, res) => {
 
         let { order_name, menus } = req.body
-
-        // //error show
-        // let errors = validationResult(req)
-        // const formatter = (error) => error.msg
-        // if (!errors.isEmpty()) {
-        //     return res.status(404).send({
-        //         message: errors.formatWith(formatter).mapped(),
-        //     });
-        // }
+        let total = 0
+            //error show
+        let errors = validationResult(req)
+        const formatter = (error) => error.msg
+        if (!errors.isEmpty()) {
+            return res.status(404).send({
+                message: errors.formatWith(formatter).mapped(),
+            });
+        }
 
         let order = new Order({ order_name, menus })
 
         order.save()
-            .then(author => {
-                res.status(201).json({ author })
+            .then(async(order) => {
+
+                // Shoud be used mongoose query but face some problem....i will be update command when i solve this probelm
+                const orderDetails = await Order.findById(order.id).populate('menus').exec()
+                for (let i = 0; i < orderDetails.menus.length; i++) {
+                    total = total + orderDetails.menus[i].price
+                }
+
+                res.status(201).json({
+                    "totalCost": total,
+                    "userDetails": {
+                        "userName": req.user.name,
+                        "address": req.user.address,
+                        "phone": req.user.phone
+                    },
+                    orderDetails,
+                })
+
             })
             .catch(err => {
                 res.status(500).json({
@@ -30,92 +48,23 @@ module.exports = {
 
     },
 
-    // authorUpdate: (req, res) => {
+    orderGet: (req, res) => {
+        Order.find().populate('menus').exec()
+            .then(orders => {
+                if (Orders) {
+                    res.status(201).json({
+                        orders
+                    })
+                } else {
+                    res.status(201).json({
+                        message: "No order!"
+                    })
+                }
+            }).catch(err => {
+                res.status(500).json({
+                    message: err.message || "Some error occurred while creating"
+                })
+            })
+    }
 
-    //     let { name } = req.body
-    //     let { id } = req.params
-
-    //     //error show
-    //     let errors = validationResult(req)
-    //     const formatter = (error) => error.msg
-    //     if (!errors.isEmpty()) {
-    //         return res.status(404).send({
-    //             message: errors.formatWith(formatter).mapped(),
-    //         });
-    //     }
-
-    //     Author.findOneAndUpdate({ _id: id }, { $set: { name } }, { new: true })
-    //         .then(author => {
-    //             if (author) {
-    //                 res.status(201).json({ author })
-    //             } else {
-    //                 return res.status(404).send({
-    //                     message: "Author not found!!!",
-    //                 });
-    //             }
-
-    //         })
-    //         .catch(err => {
-    //             res.status(500).json({
-    //                 message: err.message || "Some error occurred while updating author"
-    //             })
-    //         })
-
-    // },
-
-    // authorsGet: async(req, res) => {
-
-    //     let currentPage = parseInt(req.query.page) || 1
-    //     let itemPerPage = 2
-    //     let totalAuthors = await Author.countDocuments()
-    //     let totalPage = Math.ceil(totalAuthors / itemPerPage)
-
-    //     Author.find()
-    //         .skip((itemPerPage * currentPage) - itemPerPage)
-    //         .limit(itemPerPage)
-    //         .then(authors => {
-    //             if (authors) {
-    //                 res.status(201).json({
-    //                     "pagination": {
-    //                         currentPage,
-    //                         totalPage,
-    //                         totalAuthors
-    //                     },
-    //                     authors
-    //                 })
-    //             } else {
-    //                 return res.status(404).send({
-    //                     message: "Authors are empty!!!",
-    //                 });
-    //             }
-    //         })
-    //         .catch(err => {
-    //             res.status(500).json({
-    //                 message: err.message || "Some error occurred"
-    //             })
-    //         })
-
-    // },
-
-    // authorDelete: (req, res) => {
-
-    //     let { id } = req.params
-
-    //     Author.findOneAndDelete({ _id: id })
-    //         .then(author => {
-    //             if (author) {
-    //                 res.status(201).json({ message: 'Author deleted successfully' })
-    //             } else {
-    //                 return res.status(404).send({
-    //                     message: "Author not found!!!",
-    //                 });
-    //             }
-    //         })
-    //         .catch(err => {
-    //             res.status(500).json({
-    //                 message: err.message || "Some error occurred while deleting author"
-    //             })
-    //         })
-
-    // },
 }
