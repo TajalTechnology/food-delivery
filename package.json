@@ -30,8 +30,6 @@
         "express-validator": "^6.9.2",
         "faker": "^5.2.0",
         "jsonwebtoken": "^8.5.1",
-        "jwt-redis": "^6.0.0",
-        "mongoose": "^5.11.13",
-        "redis": "^3.0.2"
+        "mongoose": "^5.11.13"
     }
 }
